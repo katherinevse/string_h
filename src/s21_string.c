@@ -11,13 +11,6 @@
 #include "s21_string.h"
 
 
-s21_size_t s21_strlen(const char *str) {
-  s21_size_t answer = 0;
-  char *ptr = (char *)str;
-  while (*ptr != '\0') {
-    answer++;
-    ptr++;
-  }
-  return answer;
-}
+void *memmove(void *dest, const void *src, size_t n){
 
+}
