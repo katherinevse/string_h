@@ -1,11 +1,30 @@
-#include <s21_string.h>
+#include <stdio.h>
+#include <string.h>
 
-char *s21_strcpy(char *dest, const char *src){
-    size_t i = 0;
-    while ((dest[i] = src[i]) != '\0') {
-        ++i;
+
+char *strcpy(char *dest, const char *src){
+
+    char *original_dest = dest;
+
+    while (dest != "\0")
+    {
+        
     }
-    return dest;
+    
 
+
+}
+
+
+int main(void){
+    char source[] = "Hello world";
+    char source_2[100];
+
+
+    strcpy(source_2, source);
+    printf("%s\n", source);
+    printf("%s\n", source_2);
+
+    return 0;
 
 }
