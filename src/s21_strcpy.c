@@ -1,30 +1,27 @@
-#include <stdio.h>
-#include <string.h>
+#include "s21_string.h"
 
+//не видит strlen
 
-char *strcpy(char *dest, const char *src){
-
-    char *original_dest = dest;
-
-    while (dest != "\0")
-    {
-        
+// Копирует строку, на которую указывает src, в dest
+char *s21_strcpy(char *dest, const char *src) {
+    s21_size_t i = 0;
+    for (; i < s21_strlen(src); i++) {
+        dest[i] = src[i];
     }
-    
-
-
+    dest[i] = '\0';
+    return dest;
 }
 
 
-int main(void){
-    char source[] = "Hello world";
-    char source_2[100];
+// int main(void){
+//     char source[] = "Hello worldsss";
+//     char source_2[100];
 
 
-    strcpy(source_2, source);
-    printf("%s\n", source);
-    printf("%s\n", source_2);
+//     s21_strcpy(source_2, source);
+//     printf("%s\n", source);
+//     printf("%s\n", source_2);
 
-    return 0;
+//     return 0;
 
-}
+// }

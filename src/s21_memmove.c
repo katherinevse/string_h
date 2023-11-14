@@ -1,5 +1,6 @@
 #include "s21_string.h"
 
+//	Еще одна функция для копирования n символов из src в dest.
 void *s21_memmove(void *dest, const void *src, s21_size_t n) {
   char *str_dest = (char *)dest;
   char *str_src = (char *)src;
