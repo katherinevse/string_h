@@ -14,7 +14,7 @@ typedef struct {
     int flag_size; // если число отрицательное или есть + или space
     int dot; // наличие точки, говорит про  accuracy
     int upper_case; // если спецификатор - буква в верхнем
-    int g;
-    int e;
+    int g; //спецификатор g
+    int e; // если необходимо запиать число в научной
 } Spec;
 
