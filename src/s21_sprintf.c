@@ -10,10 +10,10 @@ typedef struct {
     int width; // ширина после точки я так понимаю
     int accuracy; // точность
     char length; //тип переменной ld,lf, Lf и тд
-    int number_system;
-    int flag_size;
-    int dot;
-    int upper_case;
+    int number_system; // система начисления
+    int flag_size; // если число отрицательное или есть + или space
+    int dot; // наличие точки, говорит про  accuracy
+    int upper_case; // если спецификатор - буква в верхнем
     int g;
     int e;
 } Spec;
