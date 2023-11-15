@@ -2,7 +2,7 @@
 
 //не видит strlen
 
-// Копирует строку, на которую указывает src, в dest
+// Копирует строку, на которую указывает src, в dest, включая '\0'
 char *s21_strcpy(char *dest, const char *src) {
     s21_size_t i = 0;
     for (; i < s21_strlen(src); i++) {

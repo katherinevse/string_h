@@ -10,11 +10,11 @@ char *s21_strncpy(char *dest, const char *src, size_t n){
 }
 
 
-int main(void){
-    char h[] = "Hellooo";
-    char b[100];
+// int main(void){
+//     char h[] = "Hellooo";
+//     char b[100];
 
-    s21_strncpy(b, h, 5);
-    printf("%s\n", b);
-    return 0;
-}
+//     s21_strncpy(b, h, 5);
+//     printf("%s\n", b);
+//     return 0;
+// }
