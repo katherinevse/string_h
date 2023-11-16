@@ -17,5 +17,6 @@ char *s21_strcpy(char *dest, const char *src);
 char *s21_strncpy(char *dest, const char *src, size_t n);
 
 s21_size_t s21_strlen(const char *str);
+char *s21_strchr(const char *str, int c);
 
 #endif  // SRC_S21_STRING_H_

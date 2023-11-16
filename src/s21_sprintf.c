@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include "s21_string.h"
 
 typedef struct {
   int minus;  // к левому краю
@@ -31,14 +32,22 @@ int s21_sprintf(char *str, const char *format, ...) {
       format++;
       Spec specs = {0};
       specs.number_system = 10;  // десятичная система счисления
-      format = set_specs(&specs, format, &arguments);
+      format = set_specs (&specs, format, &arguments); // все распарсить
+      while (!s21_strchr(specifiers, *format)) format++;
+      str = parser(str,src, format, specs, &arguments);
     } else {
       *str = *format;
       str++;
     }
     format++;
   }
+
+
   va_end(arguments);
+
+
+
+
 
   return (str - src);  // возвращаем кол-во записанных символов
 }
@@ -111,4 +120,13 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
     specs->minus = 1;
   }
   return format;
+}
+
+char *parser(char *str, char *src, const char *format, Spec specs, va_list *arguments{
+    if(*format == 'd' || *format == 'i'){
+        str = print_decimal(str, spec, arguments);  // прописать функцию
+
+
+    }
+
 }

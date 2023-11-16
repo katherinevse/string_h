@@ -3,12 +3,14 @@
 #include "s21_string.h"
 
 char *s21_strchr(const char *str, int c) {
-  while (*str != (char)c) {
-    if (*str++ == '\0') {
-      return 0;
+    while (*str != '\0') {
+        if (*str == (char)c) {
+            return (char *)str;
+        }
+        str++;
     }
-  }
-  return (char *)str;
+
+    return NULL;
 }
 // int main() {
 //     const char *myString = "Hello, world!";
