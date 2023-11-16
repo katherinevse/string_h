@@ -107,7 +107,10 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments){
         specs->length = 'h';
     if(specs->length !=0) format +=1;
 
-
-
-
+    //не нужно
+    if(specs->width <0){
+        specs->width = -specs->width;
+        specs->minus = 1;
+    }
+    return format;
 }
