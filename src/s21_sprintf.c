@@ -27,22 +27,18 @@ int s21_sprintf(char *str, const char *format, ...){
     va_list arguments; // считывание ..., записываются туда переменные
     va_start(arguments,format); // в формат записываем последнюю известную переменную
 
-
     while (*format){
         if(*format == '%'){
             format++;
             Spec specs = {0};
             specs.number_system = 10; //десятичная система счисления
             format = set_specs(&specs, format, &arguments);
-
-
         } else{
             *str = *format;
             str++;
         }
         format++;
     }
-
     va_end(arguments);
 
     return(str-src); //возвращаем кол-во записанных символов
@@ -74,9 +70,43 @@ const char *get_specs(const char *format,Spec *specs){
     return format;
 }
 
+const char *get_width(const char *format, int *width,va_list *arguments ){
+    *width = 0;
+    //ширина через звездочку
+    if(*format == '*'){
+        *width = va_arg(arguments, int);
+        format++;
+    }
+    while(format){
+        if( '0' <= *format && *format <= '9'){
+            *width *=10;
+            *width +=*format - '0';
+        }
+        else
+            break;
+        format++;
+    }
+    //точка находится вне
+    return format;
+}
+
 const char *set_specs(Spec *specs, const char *format, va_list *arguments){
     format = get_specs(format,specs);
-    format = get_width
+    format = get_width(format, &specs->width, arguments);
+    if(*format == '.'){
+        specs->dot = 1;
+        specs->full_zero = 0; // уточнить
+        format +=1; //????
+        format = get_width(format, &specs->accuracy, arguments); //число точности
+    }
+    if(*format == 'L')
+        specs->length = 'L';
+    else if(*format == '1')
+        specs->length = '1';
+    else if(*format == 'h')
+        specs->length = 'h';
+    if(specs->length !=0) format +=1;
+
 
 
 
