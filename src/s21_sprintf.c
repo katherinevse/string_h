@@ -18,3 +18,8 @@ typedef struct {
     int e; // если необходимо запиать число в научной
 } Spec;
 
+
+int s21_sprintf(char *str, const char *format, ...){
+    char specifiers[] = "dfsgGeExXcuiopn";
+    сhar *src = str; //изначальное положение str записываем в src чтобы узнать кол-во записанных символов
+}
