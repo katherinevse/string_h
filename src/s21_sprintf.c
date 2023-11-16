@@ -1,4 +1,3 @@
-#include <stdarg.h>
 #include "s21_string.h"
 
 typedef struct {
@@ -44,10 +43,6 @@ int s21_sprintf(char *str, const char *format, ...) {
 
 
   va_end(arguments);
-
-
-
-
 
   return (str - src);  // возвращаем кол-во записанных символов
 }
@@ -121,6 +116,12 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
   }
   return format;
 }
+
+ char *print_decimal(char *str, Spec spec, va_list *arguments){
+
+
+}
+
 
 char *parser(char *str, char *src, const char *format, Spec specs, va_list *arguments{
     if(*format == 'd' || *format == 'i'){
