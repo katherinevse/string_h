@@ -1,14 +1,14 @@
-//проверки наличия буквы в другом массиве
-//strchr
+// проверки наличия буквы в другом массиве
+// strchr
 #include "s21_string.h"
 
 char *s21_strchr(const char *str, int c) {
-    while (*str != (char)c) {
-        if (*str++ == '\0') {
-            return 0;
-        }
+  while (*str != (char)c) {
+    if (*str++ == '\0') {
+      return 0;
     }
-    return (char *)str;
+  }
+  return (char *)str;
 }
 // int main() {
 //     const char *myString = "Hello, world!";
