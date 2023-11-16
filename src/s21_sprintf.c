@@ -40,26 +40,10 @@ int s21_sprintf(char *str, const char *format, ...){
             *str = *format;
             str++;
         }
-        format++
-
-
-
-
+        format++;
     }
 
-
-
-
     va_end(arguments);
-
-
-
-
-
-
-
-
-
 
     return(str-src); //возвращаем кол-во записанных символов
 }
@@ -84,11 +68,15 @@ const char *get_specs(const char *format,Spec *specs){
             break;
         format++;
     }
-
+    //не может быть одновременно и плюс и пробел
+    specs->space = (specs->space && !specs->plus);
+    specs->full_zerof = (specs->full_zero && !specs->minus);
+    return format;
 }
 
 const char *set_specs(Spec *specs, const char *format, va_list *arguments){
     format = get_specs(format,specs);
+    format = get_width
 
 
 
