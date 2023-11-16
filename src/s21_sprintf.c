@@ -23,7 +23,22 @@ typedef struct {
 int s21_sprintf(char *str, const char *format, ...){
     char specifiers[] = "dfsgGeExXcuiopn";
     сhar *src = str; //изначальное положение str записываем в src чтобы узнать кол-во записанных символов
-    va_list arguments; // считывание ...
+
+    va_list arguments; // считывание ..., записываются туда переменные
+    va_start(arguments,format); // в формат записываем последнюю известную переменную
+
+
+
+
+
+    va_end(arguments);
+
+
+
+
+
+
+
 
 
 
