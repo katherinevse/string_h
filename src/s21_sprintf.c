@@ -165,8 +165,6 @@ char *parser(char *str, char *src, const char *format, Spec specs, va_list *argu
 
 
 }
-
-
 const char* print_c(char *str,Spec *specs, symbol){
     char *ptr = str;
     char *string = va_arg(arguments, char*);
