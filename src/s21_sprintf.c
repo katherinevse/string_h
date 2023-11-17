@@ -40,8 +40,6 @@ int s21_sprintf(char *str, const char *format, ...) {
     }
     format++;
   }
-
-
   va_end(arguments);
 
   return (str - src);  // возвращаем кол-во записанных символов
