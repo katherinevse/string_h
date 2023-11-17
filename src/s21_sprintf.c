@@ -46,9 +46,6 @@ int s21_sprintf(char *str, const char *format, ...) {
     va_end(arguments);
 
 
-
-
-
     return (str - src);  // возвращаем кол-во записанных символов
 }
 
@@ -118,10 +115,10 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 
 
     // не нужно
-    if (specs->width < 0) {
-        specs->width = -specs->width;
-        specs->minus = 1;
-    }
+//    if (specs->width < 0) {
+//        specs->width = -specs->width;
+//        specs->minus = 1;
+//    }
     return format;
 }
 
