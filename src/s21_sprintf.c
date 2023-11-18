@@ -184,7 +184,6 @@ const char* print_c(char *str,Spec *specs, symbol){
         blank = tmp - specs.accuracy;
     }
 
-
     //если нет флага -, заполняем пробелы слева
     while (blank && !specs.minus)
     {
