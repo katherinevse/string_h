@@ -121,7 +121,7 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 //    }
     return format;
 }
-
+//основное
 //c, d, f, s, u, %
 // Спецификаторы: c, d, f, s, u, %
 // Флаги: -, +, (пробел)
@@ -129,7 +129,7 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 // Точность: .(число)
 // Длина: h, l
 
-
+//доп
 // Спецификаторы: g, G, e, E, x, X, o, p
 // Флаги: #, 0
 // Ширина: *
@@ -137,6 +137,8 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 // Длина: L
 
 
+
+//СПЕЦИФИКАТОРЫ!
 char *parser(char *str, char *src, const char *format, Spec specs, va_list *arguments{
     // if(*format == 'd' || *format == 'i'){
     //     //str = print_decimal(str, specs, arguments);  // прописать функцию
@@ -162,35 +164,35 @@ char *parser(char *str, char *src, const char *format, Spec specs, va_list *argu
 
 
 }
-const char* print_c(char *str,Spec *specs, symbol){
-    char *ptr = str;
-    char *string = va_arg(arguments, char*);
-    int tmp = specs.width, i = 0; //  изначальное значение ширины  //i - кол-во записанных символов
-
-    //если ширина не указана или ширина меньше длины, то
-    if(s21_size_t)specs.width < s21_strlen(string){
-        specs.width = s21_strlen(string); //устанавливаем в ширину длину строки
-    }
-    //если ширина больше чем длина строки, то пустое место заполняем пробелами
-    //blank - кол-во пробелов
-    int blank = specs.width - s21_strlen(string)
-
-
-    //если точность не указана
-    if(specs.accuracy == 0) specs.accuracy = specs.width;
-    //если точность меньше начальной ширины и она указана
-    //меняем кол-во пробелов
-    if(specs.accuracy != 0 && specs->accuracy < tmp) specs.accuracy = specs.width{
-        blank = tmp - specs.accuracy;
-    }
-
-    //если нет флага -, заполняем пробелы слева
-    while (blank && !specs.minus)
-    {
-        *str = ' ';
-        str++;
-        blank--;
-    }
+//const char* print_c(char *str,Spec *specs, symbol){
+//    char *ptr = str;
+//    char *string = va_arg(arguments, char*);
+//    int tmp = specs.width, i = 0; //  изначальное значение ширины  //i - кол-во записанных символов
+//
+//    //если ширина не указана или ширина меньше длины, то
+//    if(s21_size_t)specs.width < s21_strlen(string){
+//        specs.width = s21_strlen(string); //устанавливаем в ширину длину строки
+//    }
+//    //если ширина больше чем длина строки, то пустое место заполняем пробелами
+//    //blank - кол-во пробелов
+//    int blank = specs.width - s21_strlen(string)
+//
+//
+//    //если точность не указана
+//    if(specs.accuracy == 0) specs.accuracy = specs.width;
+//    //если точность меньше начальной ширины и она указана
+//    //меняем кол-во пробелов
+//    if(specs.accuracy != 0 && specs->accuracy < tmp) specs.accuracy = specs.width{
+//        blank = tmp - specs.accuracy;
+//    }
+//
+//    //если нет флага -, заполняем пробелы слева
+//    while (blank && !specs.minus)
+//    {
+//        *str = ' ';
+//        str++;
+//        blank--;
+//    }
 
 
 
