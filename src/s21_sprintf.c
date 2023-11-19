@@ -19,22 +19,22 @@ typedef struct {
 } Spec;
 
 
-
+//s21_sprintf(str1, "hello %d %d", 148, 56);
 int s21_sprintf(char *str, const char *format, ...) {
     char specifiers[] = "dfsgGeExXcuiopn";
-    сhar *src = str;  // изначальное положение str записываем в src чтобы узнать
-    // кол-во записанных символов
+    сhar *src = str;  // изначальное положение str записываем в src чтобы узнать // кол-во записанных символов
 
     va_list arguments;  // считывание ..., записываются туда переменные
     va_start(arguments, format);  // после  format
-//s21_sprintf(str1, "hello %d %d", 148, 56);
+
     while (*format) {
         if (*format == '%') {
             format++;
             Spec specs = {0};
             specs.number_system = 10;  // десятичная система счисления
             format = set_specs (&specs, format, &arguments); // все распарсить
-            while (!s21_strchr(specifiers, *format)) format++;
+
+            while (!s21_strchr(specifiers, *format)) format++; // ищем спецификатор
             str = parser(str,src, format, specs, &arguments);
         } else {
             *str = *format;
@@ -46,7 +46,7 @@ int s21_sprintf(char *str, const char *format, ...) {
     va_end(arguments);
     return (str - src);  // возвращаем кол-во записанных символов
 }
-
+// проверка между % и спецификатором
 const char *get_specs(const char *format, Spec *specs) {
     while (format) {
         if (*format == '+') {
@@ -68,8 +68,8 @@ const char *get_specs(const char *format, Spec *specs) {
         format++;
     }
     // не может быть одновременно и плюс и пробел
-    specs->space = (specs->space && !specs->plus);
-    specs->full_zero = (specs->full_zero && !specs->minus);
+    specs->space = (specs->space && !specs->plus); //зануляем
+    specs->full_zero = (specs->full_zero && !specs->minus); // ноль и минус
     return format;
 }
 
@@ -80,6 +80,8 @@ const char *get_width(const char *format, int *width, va_list *arguments) {
         *width = va_arg(arguments, int);
         format++;
     }
+    //преобразовываем из char в int
+    //потом доходим до точности(точка) -> выходим из цикла
     while (format) {
         if ('0' <= *format && *format <= '9') {
             *width *= 10;
@@ -92,14 +94,15 @@ const char *get_width(const char *format, int *width, va_list *arguments) {
     return format;
 }
 
+//-+014.7 проверка set_specs
 const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
     format = get_specs(format, specs);
     format = get_width(format, &specs->width, arguments);
     if (*format == '.') {
         specs->dot = 1;
-        specs->full_zero = 0;  // уточнить
+        specs->full_zero = 0;  // не может быть одновременно и точность и ноль
         format += 1;           //????
-        format = get_width(format, &specs->accuracy, arguments);  // число точности
+        format = get_width(format, &specs->accuracy, arguments);  // 2 аргумент почему такой?
     }
     if (*format == 'L')
         specs->length = 'L';
@@ -119,22 +122,6 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 //    }
     return format;
 }
-//основное
-//c, d, f, s, u, %
-// Спецификаторы: c, d, f, s, u, %
-// Флаги: -, +, (пробел)
-// Ширина: (число)
-// Точность: .(число)
-// Длина: h, l
-
-//доп
-// Спецификаторы: g, G, e, E, x, X, o, p
-// Флаги: #, 0
-// Ширина: *
-// Точность: .*
-// Длина: L
-
-
 
 //СПЕЦИФИКАТОРЫ!
 char *parser(char *str, char *src, const char *format, Spec specs, va_list *arguments{
@@ -162,6 +149,13 @@ char *parser(char *str, char *src, const char *format, Spec specs, va_list *argu
 
 
 }
+
+
+
+
+
+
+
 //const char* print_c(char *str,Spec *specs, symbol){
 //    char *ptr = str;
 //    char *string = va_arg(arguments, char*);
