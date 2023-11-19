@@ -18,15 +18,16 @@ typedef struct {
     int e;  // если необходимо запиать число в научной
 } Spec;
 
+
+
 int s21_sprintf(char *str, const char *format, ...) {
     char specifiers[] = "dfsgGeExXcuiopn";
     сhar *src = str;  // изначальное положение str записываем в src чтобы узнать
     // кол-во записанных символов
 
     va_list arguments;  // считывание ..., записываются туда переменные
-    va_start(arguments,
-             format);  // в формат записываем последнюю известную переменную
-
+    va_start(arguments, format);  // после  format
+//s21_sprintf(str1, "hello %d %d", 148, 56);
     while (*format) {
         if (*format == '%') {
             format++;
@@ -41,11 +42,8 @@ int s21_sprintf(char *str, const char *format, ...) {
         }
         format++;
     }
-
-
+    *str = '\0';
     va_end(arguments);
-
-
     return (str - src);  // возвращаем кол-во записанных символов
 }
 
