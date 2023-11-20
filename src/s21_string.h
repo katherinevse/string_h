@@ -19,4 +19,17 @@ char *s21_strncpy(char *dest, const char *src, size_t n);
 s21_size_t s21_strlen(const char *str);
 char *s21_strchr(const char *str, int c);
 
+
+
+
+
+//sprintf
+const char *get_specs(const char *format, Spec *specs);
+const char *get_width(const char *format, int *width, va_list *arguments);
+const char *set_specs(Spec *specs, const char *format, va_list *arguments);
+const char* print_char(char *str,Spec specs,int symbol);
+
+
+char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments);
+
 #endif  // SRC_S21_STRING_H_
