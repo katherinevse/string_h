@@ -128,8 +128,8 @@ char *parser(char *str, char *src, const char *format, Spec specs, va_list *argu
     // if(*format == 'd' || *format == 'i'){
     //     //str = print_decimal(str, specs, arguments);  // прописать функцию
     if(*format == 'c'){
-        int symbol = va_arg(*arguments, int)
-        str = print_c(str,specs,symbol)
+        int symbol = va_arg(*arguments, int);// не работает с char или плохо работает
+        str = print_c(str,specs,symbol); // не можем просто написать *str =  symbol ;
     }
     else if(*format == 'u' || *format == '0' || *format == 'x'  || *format == 'X'){
         //specs = set_number_system(specs, *format);
