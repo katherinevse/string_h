@@ -22,7 +22,7 @@ typedef struct {
 //s21_sprintf(str1, "hello %d %d", 148, 56);
 int s21_sprintf(char *str, const char *format, ...) {
     char specifiers[] = "dfsgGeExXcuiopn";
-    сhar *src = str;  // изначальное положение str записываем в src чтобы узнать // кол-во записанных символов
+    char *src = str;  // изначальное положение str записываем в src чтобы узнать // кол-во записанных символов
 
     va_list arguments;  // считывание ..., записываются туда переменные
     va_start(arguments, format);  // после  format
@@ -152,8 +152,10 @@ const char* print_c(char *str,Spec *specs,int symbol){
     int i = 0; //подсчет символов 
 
     while(specs.width - 1 > 0 && !specs->minus) {
-        *str = ' '
-
+        *str = ' ';
+        str++;
+        i++;
+        specs.width--;
     }
 
 
