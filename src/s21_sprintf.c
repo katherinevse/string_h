@@ -144,23 +144,34 @@ char *parser(char *str, char *src, const char *format, Spec specs, va_list *argu
     else if(*format == '%'){
         str = print_c(str,specs,'%');
     }
-
+    //
 }
 
-const char* print_c(char *str,Spec *specs,int symbol){
+const char* print_c(char *str,Spec specs,int symbol){
     char *ptr = S21_NULL;
     int i = 0; //подсчет символов 
 
-    while(specs.width - 1 > 0 && !specs->minus) {
+    //проверка на ширину и минус 
+    while(specs.width - 1 > 0 && !specs->minus) { 
         *str = ' ';
         str++;
         i++;
         specs.width--;
     }
-
-
-
-
+    if (symbol <= 127)
+    {
+        *str = symbol;
+        str++;
+        i++;
+        while (specs.width - 1 > 0 && specs->minus){
+            *str = ' ';
+            str++;
+            i++;
+            specs.width--;
+        }
+        ptr = str; 
+    }
+    return ptr;
 }
 
 
