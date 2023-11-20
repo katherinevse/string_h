@@ -151,7 +151,7 @@ const char* print_char(char *str,Spec specs,int symbol){
     int i = 0; //подсчет символов 
 
     //проверка на ширину и минус 
-    while(specs.width - 1 > 0 && !specs->minus) { 
+    while(specs.width - 1 > 0 && !specs.minus) { 
         *str = ' ';
         str++;
         i++;
@@ -162,7 +162,7 @@ const char* print_char(char *str,Spec specs,int symbol){
         *str = symbol;
         str++;
         i++;
-        while (specs.width - 1 > 0 && specs->minus){
+        while (specs.width - 1 > 0 && specs.minus){
             *str = ' ';
             str++;
             i++;
