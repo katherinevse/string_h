@@ -34,7 +34,7 @@ int s21_sprintf(char *str, const char *format, ...) {
             format = set_specs(&specs, format, &arguments); // все распарсить
 
             while (!s21_strchr(specifiers, *format)) format++; // ищем спецификатор
-            str = parser(str,src, format, specs, &arguments);
+            str = read_spec(str,src, format, specs, &arguments);
         } else {
             *str = *format;
             str++;

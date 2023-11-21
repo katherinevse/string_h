@@ -1,24 +1,8 @@
 #include <stdarg.h>
 #include "s21_string.h"
 
-typedef struct {
-    int minus;  // к левому краю
-    int plus;   // знак
-    int space;  //+символ под знак
-    int hash;  // вывод 16 и 8ричных чисел в формате 0х и 0 соответсвенно
-    int full_zero;  // заполнить нулями а не пробелами
-    int width;      // ширина после точки
-    int accuracy;   // точность
-    char length;    // тип переменной ld,lf, Lf и тд
-    int number_system;  // система начисления
-    int flag_size;  // если число отрицательное или есть + или space
-    int dot;         // наличие точки, говорит про  accuracy
-    int upper_case;  // если спецификатор - буква в верхнем
-    int g;           // спецификатор g
-    int e;  // если необходимо запиать число в научной
-} Spec;
 
-//s21_sprintf(str1, "hello %d %d", 148, 56);
+//s21_sprintf(str1, "hello %-14d %d", 148, 56);
 int s21_sprintf(char *str, const char *format, ...) {
     char specifiers[] = "dfsgGeExXcuiopn";
     char *src = str; 
@@ -76,7 +60,7 @@ const char *get_width(const char *format, int *width, va_list *arguments) {
     *width = 0;
     // ширина через звездочку
     if (*format == '*') {
-        *width = va_arg(arguments, int);
+        *width = va_arg(*arguments, int);
         format++;
     }
     //преобразовываем из char в int
@@ -93,7 +77,7 @@ const char *get_width(const char *format, int *width, va_list *arguments) {
     return format;
 }
 
-//-+014.7 проверка set_specs
+//-+014.7 проверка 
 const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
     format = get_specs(format, specs);
     format = get_width(format, &specs->width, arguments);
@@ -113,8 +97,6 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
         specs->length = 'h';
     if (specs->length != 0) format += 1;
 
-
-    // не нужно
 //    if (specs->width < 0) {
 //        specs->width = -specs->width;
 //        specs->minus = 1;
@@ -133,17 +115,12 @@ char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *a
     else if(*format == 'u' || *format == '0' || *format == 'x'  || *format == 'X'){
         //specs = set_number_system(specs, *format);
     }
-    // else if(*format = 'f'){
-
-    // }
-    // else if(*format = 's'){
-    //     str = print_s(str,specs,arguments);
-    // }
-
+    else if(*format == 's'){
+        str = print_s(str,specs,arguments);
+    }
     else if(*format == '%'){
         str = print_char(str,specs,'%');
     }
-    //
 }
 
 const char* print_char(char *str,Spec specs,int symbol){
@@ -173,5 +150,59 @@ const char* print_char(char *str,Spec specs,int symbol){
     return ptr;
 }
 
+
+char *print_s(char *str, Spec specs, va_list *arguments) {
+  char *ptr = str;
+  char *string = va_arg(*arguments, char *);
+
+  // усли удалось получить строку
+  if (string) {
+    int tmp = specs.width, i = 0;
+
+    if ((s21_size_t)specs.width < s21_strlen(string)) {
+      specs.width = s21_strlen(string);
+    }
+    int blank = specs.width - s21_strlen(string);
+
+    if (specs.accuracy == 0) {
+      specs.accuracy = specs.width;
+    }
+    if (specs.accuracy != 0 && specs.accuracy < tmp) {
+      blank = tmp - specs.accuracy;
+    }
+    // заполняем пробелами слева
+    while (blank && !specs.minus) {
+      *str = ' ';
+      str++;
+      blank--;
+    }
+    // посимвольно копируем из переменной string в str
+    while (*string != '\0') {
+      if (!specs.accuracy) {
+        break;
+      }
+      *str = *string;
+      str++;
+      string++;
+      i++;
+      specs.accuracy--;
+    }
+    //  если был указан флаг - тогда заполняем пробелами справа
+    while (blank && specs.minus) {
+      *str = ' ';
+      str++;
+      blank--;
+    }
+    // если не удалось получить строку из параметра пишем в нашу строку null
+  } else {
+    str = s21_memcpy(str, "(null)", 6);
+    str += 6;
+  }
+  // присваиваем ptr str и возвращаем его что бы передвинуть указатель строки
+  if (ptr) {
+    ptr = str;
+  }
+  return ptr;
+}
 
 
