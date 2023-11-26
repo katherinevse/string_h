@@ -106,8 +106,7 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments) {
   if (*format == 'd' || *format == 'i') {
     str = print_decimal(str, specs, arguments);
-  } else if (*format == 'u' || *format == 'o' || *format == 'x' ||
-             *format == 'X') {
+  } else if (*format == 'u' || *format == 'o' || *format == 'x' || *format == 'X') {
     specs = set_number_system(specs, *format);
     str = print_u(str, specs, *(format - 1), arguments);
   } else if (*format == 'c') {

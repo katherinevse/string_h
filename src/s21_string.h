@@ -44,10 +44,29 @@ typedef struct {
 const char *get_specs(const char *format, Spec *specs);
 const char *get_width(const char *format, int *width, va_list *arguments);
 const char *set_specs(Spec *specs, const char *format, va_list *arguments);
+char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments);
+
 const char* print_char(char *str,Spec specs,int symbol);
 char *print_s(char *str, Spec specs, va_list *arguments);
+char *print_p(char *str, Spec *specs, va_list arguments)
 
 
-char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments);
+
+s21_size_t get_size_decimal(Spec *specs,long int num);
+char spec_print_u(char *str, Spec specs, char format, va_list *arguments);
+int unsigned_decimal_string(char *buf_str,Spec specs, unsigned long int num,s21_size_t size_num);
+int unsigned_decimal_string_helper(Spec specs, long int num, char *str_num, s21_size_t size_decimal, int i);
+s21_size_t size_unsigned_decimal(Spec *specs,unsigned long int num);
+Spec place_number_system(Spec specs, char format);
+char print_decimal(char *str, Spec specs, va_list arguments);
+int decimal_string_helper(Spec specs, long int num, char *str_num, s21_size_t size_decimal, int i);
+int decimal_string_zeros(Spec specs, long int num, char *str_num, s21_size_t size_decimal, int i, int copy_num, int flag);
+int decimal_string(Spec specs, long int num, char *str_num, s21_size_t size_decimal);
+char get_num_char(int num, int upper_case);
+s21_size_t get_size_decimal(Spec *specs,long int num);
+
+
+
+
 
 #endif  // SRC_S21_STRING_H_
