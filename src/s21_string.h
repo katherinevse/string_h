@@ -54,7 +54,7 @@ char *print_p(char *str, Spec *specs, va_list arguments)
 
 s21_size_t get_size_decimal(Spec *specs,long int num);
 char spec_print_u(char *str, Spec specs, char format, va_list *arguments);
-int unsigned_decimal_string(char *buf_str,Spec specs, unsigned long int num,s21_size_t size_num);
+int decimal_string(char *buf_str,Spec specs, unsigned long int num,s21_size_t size_num);
 int unsigned_decimal_string_helper(Spec specs, long int num, char *str_num, s21_size_t size_decimal, int i);
 s21_size_t size_unsigned_decimal(Spec *specs,unsigned long int num);
 Spec place_number_system(Spec specs, char format);

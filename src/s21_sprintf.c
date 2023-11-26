@@ -234,3 +234,87 @@ char *print_p(char *str, Spec *specs, va_list arguments) {
   if (buffer) free(buffer);
   return str;
 }
+
+char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
+    unsigned long int num = 0;
+    //по типу переменной разбираем текущий спецификатор (long, short, int) with "unsigned" word
+    if (format == 'l') num = (unsigned long int)va_arg(*arguments,unsigned long int);
+    else if (format == 'h') num = (unsigned short int)va_arg(*arguments,unsigned short);
+    else num = (unsigned int)va_arg(*arguments,unsigned int);
+
+    s21_size_t size_num = size_unsigned_decimal(&specs, num); //почему такой размер? 
+    char *buf_str = malloc(sizeof(char) * size_num); //указатель на какой-то участок памяти 
+    if (buf_str) {
+        int i = decimal_string(buf_str, specs, num, size_num);
+        //reversing buffer string to majot str
+        for (int j = i - 1; j >= 0; j--) {
+            *str = buf_str[j];
+            str++;
+        }
+        while (i < specs.width) {
+            *str = ' ';
+            str++;
+            i++;//i am not sure about this string (188), but i think without it we will have eternal cycle
+        }
+    }
+    if (buf_str) free(buf_str);
+    return str;
+}
+
+
+//подсчет, сколько памяти под аргумент в str1
+int decimal_string(char *buf_str,Spec specs, unsigned long int num,s21_size_t size_num) {
+    int flag = 0, i = 0;
+    if (specs.hash && specs.number_system == 8) specs.flag_size = 1;
+    //review of # spec and number-system
+    else if (specs.hash && specs.number_system == 16) specs.flag_size = 2;
+    long int copy_num = num;
+    i = decimal_string_zeros(specs, num, buf_str, size_num, i, copy_num, flag);
+    //flags '+' '-' ' ' treatment
+    i = unsigned_decimal_string_helper(specs, num, buf_str, size_num, i);
+    return i;
+}
+
+//???
+int decimal_string_zeros(Spec specs, long int num, char *str_num, s21_size_t size_decimal, int i, int copy_num, int flag) {
+    //printing number in a mass if it is 0
+    if (((copy_num == 0) && (specs.accuracy || specs.width || specs.space)) || (copy_num == 0 && !specs.accuracy && !specs.width && !specs.space && !specs.dot)) {
+        char symbol = copy_num % specs.number_system + '0';
+        //transforming num to sym by dividing to numerical system and adding 0 symbol
+        str_num[i] = symbol;
+        i++;
+        size_decimal--;
+        copy_num /= 10;
+    }
+    //printing number in a mass if it is not 0
+    while (copy_num && str_num && size_decimal) {
+        char symbol = get_num_char(copy_num % specs.number_system, specs.upper_case);
+        str_num[i] = symbol;
+        i++;
+        size_decimal--;
+        copy_num /= 10;
+    }
+    if (flag) num = -num;
+    //at the start of func we had a flag to negative number
+    //flag '0' treatment review
+    if (specs.accuracy > i) {//accuracy is bigger than number of already printed numbers in str
+        specs.accuracy -= i;
+        specs.full_zero = 1;
+    }
+    else flag = 1;
+    //if we don't have place for zeros turning off flag '0'
+    if (size_decimal == 1 && specs.full_zero == 1 && specs.flag_size == 1) specs.full_zero = 0;
+    //flag '0' treatment
+    while (specs.full_zero && str_num && (size_decimal - specs.flag_size > 0) && (specs.accuracy || flag)) {
+        if (size_decimal == 1 && specs.flag_size == 1) break;
+        str_num[i] = '0';
+        i++;
+        size_decimal--;
+        specs.accuracy--;
+    }
+    return i;
+}
+
+
+
+
