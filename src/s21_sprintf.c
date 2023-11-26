@@ -105,7 +105,7 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 //установка шестнад. сист
 Spec place_number_system(Spec specs, char format) {
     if (format == 'o') specs.number_system = 8;
-    else if (format == 'x' || format == 'X') specs.number_system = 16;
+    else if (format == 'x' || format == 'X') specs.number_system = 16;  //x X - регистр
     if (format == 'X') specs.upper_case = 1;
     return specs;
 }
@@ -226,34 +226,38 @@ char *print_s(char *str, Spec specs, va_list *arguments) {
   return ptr;
 }
 
-char *print_p(char *str, Spec *specs, va_list arguments) {
-  // получаем адрес из аргументов
-  unsigned long int ptr =
-      (unsigned long int)va_arg(arguments, unsigned long int);
-  // устанавливаем параметры для 16- системы что бы строка имела вид 8х
-  specs->number_system = 16;
-  specs->hash = 1;
-  specs->upper_case = 0;
+// char *print_p(char *str, Spec *specs, va_list arguments) {
+//   // получаем адрес из аргументов
+//   unsigned long int ptr =
+//       (unsigned long int)va_arg(arguments, unsigned long int);
+//   // устанавливаем параметры для 16- системы что бы строка имела вид 8х
+//   specs->number_system = 16;
+//   specs->hash = 1;
+//   specs->upper_case = 0;
 
-  s21_size_t size_to_num = get_buf_size_unsigned_decimal(*specs, ptr);
-  char *buffer = malloc(sizeof(char) * size_to_num);
-  if (buffer) {
-    int i = unsigned_decimal_to_string(buffer, *specs, ptr, size_to_num);
-    str += add_buffer_to_string(specs->width, &i, buffer, str);
-  }
-  if (buffer) free(buffer);
-  return str;
-}
+//   s21_size_t size_to_num = size_unsigned_decimal(*specs, ptr); //исправлено с size_unsigned_decimal указетель кричит get_buf_size_unsigned_decimal
+//   char *buffer = malloc(sizeof(char) * size_to_num);
+//   if (buffer) {
+//     int i = unsigned_decimal_to_string(buffer, *specs, ptr, size_to_num); исправить 
+//     str += add_buffer_to_string(specs->width, &i, buffer, str);исправить 
+//   }
+//   if (buffer) free(buffer);
+//   return str;
+// }
 
+
+
+//флаги u/x/X/o
 char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
     unsigned long int num = 0;
+
     //по типу переменной разбираем текущий спецификатор (long, short, int) with "unsigned" word
     if (format == 'l') num = (unsigned long int)va_arg(*arguments,unsigned long int);
     else if (format == 'h') num = (unsigned short int)va_arg(*arguments,unsigned short);
     else num = (unsigned int)va_arg(*arguments,unsigned int);
 
-    s21_size_t size_num = size_unsigned_decimal(&specs, num); //почему такой размер? 
-    char *buf_str = malloc(sizeof(char) * size_num); //указатель на какой-то участок памяти 
+    s21_size_t size_num = size_unsigned_decimal(&specs, num); //точно так же указываем кол-во памяти
+    char *buf_str = malloc(sizeof(char) * size_num); 
     if (buf_str) {
         int i = decimal_string(buf_str, specs, num, size_num);
         //reversing buffer string to majot str
