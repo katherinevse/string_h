@@ -1,6 +1,4 @@
-#include <stdarg.h>
 #include "s21_string.h"
-
 
 //s21_sprintf(str1, "hello %-14d %d", 148, 56);
 int s21_sprintf(char *str, const char *format, ...) {
@@ -105,22 +103,37 @@ const char *set_specs(Spec *specs, const char *format, va_list *arguments) {
 }
 
 //СПЕЦИФИКАТОРЫ!
-char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments){
-    // if(*format == 'd' || *format == 'i'){
-    //     //str = print_decimal(str, specs, arguments);  // прописать функцию
-    if(*format == 'c'){
-        int symbol = va_arg(*arguments, int);// не работает с char или плохо работает
-        str = print_char(str,specs,symbol); // не можем просто написать *str =  symbol ;
-    }
-    else if(*format == 'u' || *format == '0' || *format == 'x'  || *format == 'X'){
-        //specs = set_number_system(specs, *format);
-    }
-    else if(*format == 's'){
-        str = print_s(str,specs,arguments);
-    }
-    else if(*format == '%'){
-        str = print_char(str,specs,'%');
-    }
+char *read_spec(char *str, char *src, const char *format, Spec specs, va_list *arguments) {
+  if (*format == 'd' || *format == 'i') {
+    str = print_decimal(str, specs, arguments);
+  } else if (*format == 'u' || *format == 'o' || *format == 'x' ||
+             *format == 'X') {
+    specs = set_number_system(specs, *format);
+    str = print_u(str, specs, *(format - 1), arguments);
+  } else if (*format == 'c') {
+    int symbol = va_arg(*arguments, int);
+    str = print_char(str, specs, symbol);
+  } else if (*format == 's') {
+    str = print_s(str, specs, arguments);
+  } else if (*format == 'p') {
+    str = print_p(str, &specs, arguments);
+  } else if (*format == 'n') {
+    int *n = va_arg(*arguments, int *);
+    *n = (int)(str - src);
+  } else if (*format == 'f' || *format == 'F') {
+    specs = set_num_sys_double(specs, *format);
+    str = print_double(str, specs, *(format - 1), arguments);
+  } else if (*format == 'e' || *format == 'E' || *format == 'g' ||
+             *format == 'G') {
+    specs = set_num_sys_double(specs, *format);
+    str = print_e_g(str, specs, *(format - 1), arguments);
+  } else if (*format == '%') {
+    str = print_c(str, specs, '%');
+  } else {
+    str = NULL;
+  }
+  if (!str) *str = '\0';
+  return str;
 }
 
 const char* print_char(char *str,Spec specs,int symbol){
@@ -149,7 +162,6 @@ const char* print_char(char *str,Spec specs,int symbol){
     }
     return ptr;
 }
-
 
 char *print_s(char *str, Spec specs, va_list *arguments) {
   char *ptr = str;
@@ -205,4 +217,21 @@ char *print_s(char *str, Spec specs, va_list *arguments) {
   return ptr;
 }
 
+char *print_p(char *str, Spec *specs, va_list arguments) {
+  // получаем адрес из аргументов
+  unsigned long int ptr =
+      (unsigned long int)va_arg(arguments, unsigned long int);
+  // устанавливаем параметры для 16- системы что бы строка имела вид 8х
+  specs->number_system = 16;
+  specs->hash = 1;
+  specs->upper_case = 0;
 
+  s21_size_t size_to_num = get_buf_size_unsigned_decimal(*specs, ptr);
+  char *buffer = malloc(sizeof(char) * size_to_num);
+  if (buffer) {
+    int i = unsigned_decimal_to_string(buffer, *specs, ptr, size_to_num);
+    str += add_buffer_to_string(specs->width, &i, buffer, str);
+  }
+  if (buffer) free(buffer);
+  return str;
+}
