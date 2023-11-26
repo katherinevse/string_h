@@ -264,7 +264,8 @@ char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
 
 //подсчет, сколько памяти под аргумент в str1
 int decimal_string(char *buf_str,Spec specs, unsigned long int num,s21_size_t size_num) {
-    int flag = 0, i = 0;
+    int flag = 0,
+    i = 0; //для чего нам нжуен i???
     if (specs.hash && specs.number_system == 8) specs.flag_size = 1;
     //review of # spec and number-system
     else if (specs.hash && specs.number_system == 16) specs.flag_size = 2;
