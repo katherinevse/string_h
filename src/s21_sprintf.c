@@ -470,5 +470,58 @@ s21_size_t size_unsigned_decimal(Spec *specs,unsigned long int num) {
 
 
 
+//спецификатор f 
+char *print_double (char *str, Spec specs, char format, va_list *arguments) {
+    long double number = 0, e = 0;
+    if (format == 'L') number = va_arg(*arguments, long double);
+    //if last symbol was L (like Lf) -> then set it long double
+    //otherwise - double (clear f)
+    else number = va_arg(*arguments, double);
+    //size calculating
+    s21_size_t size_double = get_size_double(&specs, number);
+    char *str_num = malloc(sizeof(char) * size_double);
+    //allocating memory for string with size of result we had of integer if size_double
+    if (str_num) {
+        int i = double_string(str_num, specs, number, size_double, e);
+    }
+}
+
+
+
+
+
 
 //йомайо что происходит у вас тут
+s21_size_t get_size_double(Spec *specs, long double num) {
+    s21_size_t result = 0;//returning result
+    if (specs->accuracy == 0) specs->accuracy = 6;
+    long double copy_num = num;//do not want to change num and break it
+    if (copy_num < 0) copy_num = -copy_num;//reroll from - num if it is less than 0
+    long int whole_int = (long int) copy_num;
+    copy_num = copy_num - whole_int;
+    while (whole_int > 0) {
+        whole_int /= 10;
+        result++;//iterational changing of copy_num to count number of symbols in it
+    }
+    int floating = 0;
+    while ((long int) copy_num != copy_num) {
+        copy_num *= 10;
+        floating++;
+    }
+    if (floating < (s21_size_t)specs->accuracy) result += (s21_size_t)specs->accuracy;
+    else result += floating;
+    result++;//for .
+    if (copy_num == 0 && result == 0 && (specs->width || specs->space)) result++;
+    //if we have one of these specs, we need to add one place to symbol even result = 0
+    if (result < (s21_size_t)specs->width) result = specs->width;
+    //if width is bigger we need to get a bigger result to make it equal to width
+    if (specs->space || specs->plus || num < 0) {
+        specs->flag_size = 1;
+        result++;
+    }
+        //if we have spec to have additional one place to string or num have '-' in start of it we need to have additional place
+    if (result == 0 && copy_num == 0 && !specs->accuracy && !specs->width && !specs->space && !specs->dot) result++;
+    //if we still have result == 0 and other shit result should be 1 (for ex. we had a number "0")
+    return result;
+}
+
