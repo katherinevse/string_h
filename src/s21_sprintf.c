@@ -110,6 +110,13 @@ Spec place_number_system(Spec specs, char format) {
     return specs;
 }
 
+Spec num_sys_double(Spec specs, char format) {
+    if (format == 'g' || format == 'G') specs.g = 1;
+    //setting registers for upper case and g e
+    else if (format == 'e' || format == 'E') specs.e = 1;
+    if (format == 'G' || format == 'E') specs.upper_case = 1;
+    return specs;
+}
 
 
 //СПЕЦИФИКАТОРЫ!
@@ -234,11 +241,10 @@ char *print_s(char *str, Spec specs, va_list *arguments) {
 //   specs->number_system = 16;
 //   specs->hash = 1;
 //   specs->upper_case = 0;
-
 //   s21_size_t size_to_num = size_unsigned_decimal(*specs, ptr); //исправлено с size_unsigned_decimal указетель кричит get_buf_size_unsigned_decimal
 //   char *buffer = malloc(sizeof(char) * size_to_num);
 //   if (buffer) {
-//     int i = unsigned_decimal_to_string(buffer, *specs, ptr, size_to_num); исправить 
+//     int i = unsigned_decimal_string(buffer, *specs, ptr, size_to_num); исправить 
 //     str += add_buffer_to_string(specs->width, &i, buffer, str);исправить 
 //   }
 //   if (buffer) free(buffer);
@@ -272,10 +278,6 @@ char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
     return str;
 }
 
-
-
-
-
 // int print_e(int e, s21_size_t *size_double, char *str_num, Spec specs, int *i) {
 //     int copy_e = e;
 //     if (copy_e == 0)
@@ -285,8 +287,6 @@ char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
 //         copy_e /= 10;
 //     }
 // }
-
-
 
 char get_num_char(int num, int upper_case) {
     char flag = '0';
@@ -468,3 +468,7 @@ s21_size_t size_unsigned_decimal(Spec *specs,unsigned long int num) {
     return result;
 }
 
+
+
+
+//йомайо что происходит у вас тут
