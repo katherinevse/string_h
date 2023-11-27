@@ -245,21 +245,18 @@ char *print_s(char *str, Spec specs, va_list *arguments) {
 //   return str;
 // }
 
-
-
 //флаги u/x/X/o
 char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
     unsigned long int num = 0;
-
     //по типу переменной разбираем текущий спецификатор (long, short, int) with "unsigned" word
     if (format == 'l') num = (unsigned long int)va_arg(*arguments,unsigned long int);
     else if (format == 'h') num = (unsigned short int)va_arg(*arguments,unsigned short);
     else num = (unsigned int)va_arg(*arguments,unsigned int);
-
-    s21_size_t size_num = size_unsigned_decimal(&specs, num); //точно так же указываем кол-во памяти
-    char *buf_str = malloc(sizeof(char) * size_num); 
+    
+    s21_size_t size_num = size_unsigned_decimal(&specs, num);
+    char *buf_str = malloc(sizeof(char) * size_num);
     if (buf_str) {
-        int i = decimal_string(buf_str, specs, num, size_num);
+        int i = unsigned_decimal_string(buf_str, specs, num, size_num);
         //reversing buffer string to majot str
         for (int j = i - 1; j >= 0; j--) {
             *str = buf_str[j];
@@ -276,6 +273,9 @@ char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
 }
 
 
+
+
+
 // int print_e(int e, s21_size_t *size_double, char *str_num, Spec specs, int *i) {
 //     int copy_e = e;
 //     if (copy_e == 0)
@@ -285,9 +285,6 @@ char spec_print_u(char *str, Spec specs, char format, va_list *arguments) {
 //         copy_e /= 10;
 //     }
 // }
-
-
-
 
 
 
@@ -449,6 +446,25 @@ s21_size_t get_size_decimal(Spec *specs,long int num) {
 }
 
 
-
-
+s21_size_t size_unsigned_decimal(Spec *specs,unsigned long int num) {
+    s21_size_t result = 0;//returning result
+    unsigned long int copy_num = num;//do not want to change num and break it
+    while (copy_num > 0) {
+        copy_num /= 10;
+        result++;//iterational changing of copy_num to count number of symbols in it
+    }
+    if (copy_num == 0 && result == 0 && (specs->accuracy || specs->width || specs->space)) result++;
+    //if we have one of these specs, we need to add one place to symbol even result = 0
+    if (result < (s21_size_t)specs->width) result = specs->width;
+    //if width is bigger we need to get a bigger result to make it equal to width
+    if (result < (s21_size_t)specs->accuracy) result = specs->accuracy;
+    //analogical to accuracy
+    if (specs->space || specs->plus || num < 0) {
+        specs->flag_size = 1;
+        result++;
+    }//if we have spec to have additional one place to string or num have '-' in start of it we need to have additional place
+    if (result == 0 && copy_num == 0 && !specs->accuracy && !specs->width && !specs->space && !specs->dot) result++;
+    //if we still have result == 0 and other shit result should be 1 (for ex. we had a number "0")
+    return result;
+}
 
