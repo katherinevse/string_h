@@ -13,7 +13,7 @@ check:
 style:
 	clang-format -i *.c *.h
 	
-test:
+amogus:
 	rm -rf a.out    
 	gcc -g s21_string.c s21_string_tests.c s21_sprintf_v.c -lcheck
 
