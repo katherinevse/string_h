@@ -19,6 +19,7 @@ test:
 
 gcov_report:	$(SOURCES)
 	$(CC) $(SOURCES)	$(CHECK_FLAG)	$(COV_FLAG)
+	
 clean:
 	rm -rf s21_sprintf
 
