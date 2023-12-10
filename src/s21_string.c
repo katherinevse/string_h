@@ -1,6 +1,6 @@
 #include "s21_string.h"
 
-//Вычисляет длину строки str, не включая завершающий нулевой символ.
+// Вычисляет длину строки str, не включая завершающий нулевой символ.
 s21_size_t s21_strlen(const char *str) {
   s21_size_t i = 0;
   while (str[i] != '\0') {
@@ -9,7 +9,7 @@ s21_size_t s21_strlen(const char *str) {
   return i;
 }
 
-//Копирует до n символов из строки, на которую указывает src, в dest.
+// Копирует до n символов из строки, на которую указывает src, в dest.
 char *s21_strncpy(char *dest, const char *src, size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
     dest[i] = src[i];
@@ -17,8 +17,8 @@ char *s21_strncpy(char *dest, const char *src, size_t n) {
   return dest;
 }
 
-//Копирует символ c (беззнаковый тип) в первые n символов строки, на которую
-//указывает аргумент str.
+// Копирует символ c (беззнаковый тип) в первые n символов строки, на которую
+// указывает аргумент str.
 void *s21_memset(void *str, int c, s21_size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
     ((char *)str)[i] = (char)c;
@@ -35,7 +35,7 @@ void *s21_memmove(void *dest, const void *src, s21_size_t n) {
   return dest;
 }
 
-//Копирует n символов из src в dest.
+// Копирует n символов из src в dest.
 void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
     *(((char *)dest) + i) = *(((char *)src) + i);
@@ -56,7 +56,7 @@ void *s21_memchr(const void *str, int c, s21_size_t n) {
   return S21_NULL;
 }
 
-//Сравнивает первые n байтов str1 и str2.
+// Сравнивает первые n байтов str1 и str2.
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
   unsigned char *str_1 = (unsigned char *)str1;
   unsigned char *str_2 = (unsigned char *)str2;

@@ -114,7 +114,7 @@ Spec num_sys_double(Spec specs, char format) {
   return specs;
 }
 
-//СПЕЦИФИКАТОРЫ!
+// СПЕЦИФИКАТОРЫ!
 char *read_spec(char *str, char *src, const char *format, Spec specs,
                 va_list arguments) {
   if (*format == 'c') {
@@ -155,9 +155,9 @@ char *read_spec(char *str, char *src, const char *format, Spec specs,
 
 char *print_char(char *str, Spec specs, int symbol) {
   char *ptr = S21_NULL;
-  int i = 0;  //подсчет символов
+  int i = 0;  // подсчет символов
 
-  //проверка на ширину и минус
+  // проверка на ширину и минус
   while (specs.width - 1 > 0 && !specs.minus) {
     *str = ' ';
     str++;
@@ -248,12 +248,12 @@ char *print_p(char *str, Spec *specs, va_list arguments) {
   specs->hash = 1;
   specs->upper_case = 0;
   s21_size_t size_to_num = size_unsigned_decimal(
-      specs, ptr);  //исправлено с size_unsigned_decimal указетель кричит
+      specs, ptr);  // исправлено с size_unsigned_decimal указетель кричит
   char *buffer = malloc(sizeof(char) * size_to_num);
   // get_buf_size_unsigned_decimal
   if (buffer) {
     int i =
-        unsigned_decimal_string(buffer, *specs, ptr, size_to_num);  //исправить
+        unsigned_decimal_string(buffer, *specs, ptr, size_to_num);  // исправить
     // reversing buffer string to majot str
     for (int j = i - 1; j >= 0; j--) {
       *str = buffer[j];
@@ -272,7 +272,7 @@ char *print_p(char *str, Spec *specs, va_list arguments) {
 
 char *spec_print_u(char *str, Spec specs, char format, va_list arguments) {
   unsigned long int num = 0;
-  //по типу переменной разбираем текущий спецификатор (long, short, int) with
+  // по типу переменной разбираем текущий спецификатор (long, short, int) with
   //"unsigned" word
   if (format == 'l')
     num = (unsigned long int)va_arg(arguments, unsigned long int);
@@ -328,14 +328,15 @@ char get_num_char(int num, int upper_case) {
 
 char *print_decimal(char *str, Spec specs, va_list arguments) {
   long int num = 0;
-  if (specs.length == 'l') {  //по типу переменной разбираем текущий
-    //спецификатор (long, short, int)
+  if (specs.length == 'l') {  // по типу переменной разбираем текущий
+    // спецификатор (long, short, int)
     num = (long int)va_arg(arguments, long int);
   } else {
     num = (int)va_arg(arguments, int);
   }
   s21_size_t size_decimal = get_size_decimal(&specs, num);
-  //вызов функции для подсчета буфера для числа (последовательное деление на 10)
+  // вызов функции для подсчета буфера для числа (последовательное деление на
+  // 10)
   char *str_num = malloc(sizeof(char) * size_decimal);
   // allocating memory for string with size of result we had of integer if
   // size_decimal
@@ -460,8 +461,8 @@ s21_size_t get_size_decimal(Spec *specs, long int num) {
   if (result < (s21_size_t)specs->width) result = specs->width;
   // if width is bigger we need to get a bigger result to make it equal to width
   if (result < (s21_size_t)specs->accuracy) result = specs->accuracy;
-  if ((specs->space || specs->plus || num < 0) && (int)result != specs->accuracy &&
-      (int)result != specs->width) {
+  if ((specs->space || specs->plus || num < 0) &&
+      (int)result != specs->accuracy && (int)result != specs->width) {
     specs->flag_size = 1;
     result++;
   }
@@ -665,7 +666,7 @@ int double_string(char *str_num, Spec specs, long double number,
       str_num[i] = '.';
       i++;
     }
-    if (((integerr == 0))) {
+    if (integerr == 0) {
       char symbol = integerr % specs.number_system + '0';
       // transforming num to sym by dividing to numerical system and adding 0
       // symbol

@@ -144,7 +144,7 @@ START_TEST(test_case_s21_strrchr) {
   int c_2 = '%';
 
   char str_3[20] = "ПЕПЕГА";
-  int c_3 = L'\u041F';  //Буква П в кодировке Unicode
+  int c_3 = L'\u041F';  // Буква П в кодировке Unicode
 
   char str_4[20] = "PEPEGA STAREGA";
   int c_4 = ' ';
@@ -1877,7 +1877,7 @@ Suite *s21_string_suite(void) {
 
   tc_core = tcase_create("Core");
 
-  //Тесты основных функций
+  // Тесты основных функций
   tcase_add_test(tc_core, test_case_s21_strchr);
   tcase_add_test(tc_core, test_case_s21_strncpy);
   tcase_add_test(tc_core, test_case_s21_memset);
@@ -1894,13 +1894,13 @@ Suite *s21_string_suite(void) {
   tcase_add_test(tc_core, test_case_s21_strlen);
   tcase_add_test(tc_core, test_case_s21_strerror);
 
-  //Тесты функций в стиле C#
+  // Тесты функций в стиле C#
   tcase_add_test(tc_core, test_case_s21_to_upper);
   tcase_add_test(tc_core, test_case_s21_to_lower);
   tcase_add_test(tc_core, test_case_s21_insert);
   tcase_add_test(tc_core, test_case_s21_trim);
 
-  //Тесты sprintf
+  // Тесты sprintf
   tcase_add_test(tc_core, s21_sprintf_f_test);
   tcase_add_test(tc_core, s21_sprintf_g_test);
   tcase_add_test(tc_core, s21_sprintf_prc_test);

@@ -14,7 +14,7 @@
 #define S21_NULL ((void *)0)
 typedef unsigned long s21_size_t;
 
-//Оснонвые функции
+// Оснонвые функции
 char *s21_strchr(const char *str, int c);
 void *s21_memcpy(void *dest, const void *src, s21_size_t n);
 void *s21_memmove(void *dest, const void *src, s21_size_t n);
@@ -88,7 +88,7 @@ int double_string(char *str_num, Spec specs, long double number,
                   s21_size_t size_double);
 char *nan_or_inf(char *str, long double number, Spec specs, s21_size_t size);
 
-//Функции тестирования
+// Функции тестирования
 int s21_strchr_test(const char *str, int symbol);
 int s21_strncpy_test(char *dest, const char *src, s21_size_t n);
 int s21_memset_test(void *str, int c, s21_size_t n);
@@ -105,7 +105,7 @@ int s21_memcmp_test(const void *str1, const void *str2, s21_size_t n);
 int s21_strlen_test(const char *str);
 int s21_strerror_test(int errornum);
 
-//Функции в стиле C#
+// Функции в стиле C#
 void *s21_to_upper(const char *str);
 void *s21_to_lower(const char *str);
 void *s21_insert(const char *src, const char *str, size_t start_index);
