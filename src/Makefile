@@ -1,45 +1,50 @@
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra
-GCOV_FLAG = --coverage
-CHECK_FLAG = -lcheck
-SOURCES = s21_string_tests.c s21_string.c
-LIB_NAME = s21_string.a
+LFLAGS= -lcheck
+CFLAGS=-Wall -Werror -Wextra -pedantic -std=c11
+GCOV_FLAGS=-lgcov --coverage
+CC=gcc
+
 
 # Определение переменной для идентификации текущей операционной системы
 UNAME_S := $(shell uname -s)
 
 # Параметры компиляции для разных операционных систем
 ifeq ($(UNAME_S),Linux)
-    CFLAGS += -DLINUX
+    LFLAGS += -L. libs21_string.a -lm -lsubunit
 endif
 
-all: $(LIB_NAME)
+.PHONY: clean all rebuild
 
-$(LIB_NAME): $(SOURCES:.c=.o)
-	ar rcs $@ $^
+all: s21_string.a
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+test: libs21_string.a s21_string_tests.o
+	$(CC) $^ $(LFLAGS) -o $@
 
-check:
-	clang-format -n *.c *.h
+gcov_report: s21_string.c s21_string_tests.c  s21_sprintf.c libs21_string.a
+	$(CC) $(CFLAGS) $^ $(LFLAGS) $(GCOV_FLAGS)
+	./a.out
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory gcov_report
 
-style:
-	clang-format -i *.c *.h
+libs21_string.a: s21_string.a
+	mv s21_string.a libs21_string.a
 
-test: $(LIB_NAME)
-	rm -rf test_executable
-	$(CC) $(CFLAGS) s21_string_tests.c $(LIB_NAME) -o test_executable $(CHECK_FLAG)
-	./test_executable
+s21_string.a: s21_string.o s21_sprintf.o
+	ar -rcs $@ $^
 
-gcov_report: $(SOURCES)
-	$(CC) $(CFLAGS) $(SOURCES) $(CHECK_FLAG) $(GCOV_FLAG)
-	./test_executable
-	gcov $(SOURCES)
+s21_string.o: s21_string.c 
+	$(CC) -c $(CFLAGS) $^
+	
+s21_sprintf.o: s21_sprintf.c
+	$(CC) -c $(CFLAGS) $^
+
+s21_string_tests.o: s21_string_tests.c
+	$(CC) -c $(CFLAGS) $^
 
 clean:
-	rm -rf *.o *.a test_executable *.gcov *.gcda *.gcno
+	rm -rf *.o test gcov_report *.gcda *.gcno coverage.info *.a a.out
 
-rebuild:
-	make clean
-	make all
+rebuild: clean all
+
+
+man:
+	$(CC) -g s21_string.c s21_sprintf.c test.c -o test

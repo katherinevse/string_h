@@ -26,15 +26,6 @@ void *s21_memset(void *str, int c, s21_size_t n) {
   return str;
 }
 
-//	Еще одна функция для копирования n символов из src в dest.
-void *s21_memmove(void *dest, const void *src, s21_size_t n) {
-  char str_temp[100] = {0};
-
-  s21_memcpy(str_temp, src, n);
-  s21_memcpy(dest, str_temp, n);
-  return dest;
-}
-
 // Копирует n символов из src в dest.
 void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
@@ -58,14 +49,16 @@ void *s21_memchr(const void *str, int c, s21_size_t n) {
 
 // Сравнивает первые n байтов str1 и str2.
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
-  unsigned char *str_1 = (unsigned char *)str1;
-  unsigned char *str_2 = (unsigned char *)str2;
-  int result = 0;
-
-  for (s21_size_t i = 0; result == 0 && str_1[i] != '\0' && i < n; i += 1)
-    result = str_1[i] - str_2[i];
-
-  return result;
+  unsigned char *pstr1 = (unsigned char *)str1;
+  unsigned char *pstr2 = (unsigned char *)str2;
+  for (s21_size_t i = 0; i < n; i++) {
+    if (*pstr1 < *pstr2 || *pstr1 > *pstr2) {
+      return *pstr1 - *pstr2;
+    }
+    pstr1++;
+    pstr2++;
+  }
+  return 0;
 }
 
 // Вычисляет длину начального сегмента str1, который полностью состоит из
@@ -117,6 +110,186 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
 
   return dest;
 }
+
+// Возвращает копию строки (str), преобразованной в верхний регистр. В случае
+// какой-либо ошибки следует вернуть значение NULL
+void *s21_to_upper(const char *str) {
+  if (str == S21_NULL) {
+    return S21_NULL;
+  }
+
+  int lenght = s21_strlen(str);
+
+  char *result = (char *)malloc(lenght + 1);
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
+
+  for (int i = 0; i < lenght; i++) {
+    if (str[i] >= 'a' && str[i] <= 'z') {
+      result[i] = str[i] - 'a' + 'A';
+    } else {
+      result[i] = str[i];
+    }
+  }
+
+  result[lenght] = '\0';
+  return result;
+}
+// Возвращает копию строки (str), преобразованной в нижний регистр. В случае
+// какой-либо ошибки следует вернуть значение NULL
+void *s21_to_lower(const char *str) {
+  if (str == S21_NULL) {
+    return S21_NULL;
+  }
+
+  int lenght = s21_strlen(str);
+
+  char *result = (char *)malloc(lenght + 1);
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
+
+  for (int i = 0; i < lenght; i++) {
+    if (str[i] >= 'A' && str[i] <= 'Z') {
+      result[i] = str[i] - 'A' + 'a';
+    } else {
+      result[i] = str[i];
+    }
+  }
+
+  result[lenght] = '\0';
+  return result;
+}
+
+// Возвращает новую строку, в которой указанная строка (str) вставлена в
+// указанную позицию (start_index) в данной строке (src). В случае какой-либо
+// ошибки следует вернуть значение NULL
+void *s21_insert(const char *src, const char *str, size_t start_index) {
+  if (src == S21_NULL || str == S21_NULL || start_index > s21_strlen(src)) {
+    return S21_NULL;
+  }
+
+  s21_size_t src_len = s21_strlen(src);
+  s21_size_t str_len = str_len = s21_strlen(str);
+  s21_size_t result_len = src_len + str_len;
+
+  char *result = (char *)malloc(result_len + 1);
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
+
+  s21_strncpy(result, src, start_index);
+  s21_strncpy(result + start_index, str, str_len);
+  strcpy(result + start_index + str_len, src + start_index);
+
+  return result;
+}
+
+// Возвращает новую строку, в которой удаляются все начальные и конечные
+// вхождения набора заданных символов (trim_chars) из данной строки (src). В
+// случае какой-либо ошибки следует вернуть значение NULL
+void *s21_trim(const char *src, const char *trim_chars) {
+  if (src == S21_NULL || trim_chars == S21_NULL) {
+    return S21_NULL;
+  }
+
+  size_t src_len = strlen(src);
+  size_t start_index = 0;
+  size_t end_index = src_len - 1;
+
+  while (start_index < src_len &&
+         s21_strchr(trim_chars, src[start_index]) != S21_NULL) {
+    start_index++;
+  }
+
+  while (end_index > start_index &&
+         s21_strchr(trim_chars, src[end_index]) != S21_NULL) {
+    end_index--;
+  }
+
+  s21_size_t result_len =
+      (start_index <= end_index) ? (end_index - start_index + 1) : 0;
+
+  char *result = (char *)malloc(result_len + 1);
+  if (result == S21_NULL) {
+    return S21_NULL;  // Ошибка выделения памяти
+  }
+
+  s21_strncpy(result, src + start_index, result_len);
+  result[result_len] = '\0';
+
+  return result;
+}
+
+// Функции Люды
+
+// Выполняет поиск первого вхождения символа c (беззнаковый тип) в строке,
+// на которую указывает аргумент str.
+char *s21_strchr(const char *str, int c) {
+  unsigned char *pstr = (unsigned char *)str;
+  int length = s21_strlen(str);
+  for (int i = 0; i <= length; i++) {
+    if (*pstr == (unsigned char)c) {
+      return (char *)pstr;
+    }
+    pstr++;
+  }
+  return S21_NULL;
+}
+
+// Находит первый символ в строке str1, который соответствует любому символу,
+// указанному в str2.
+char *s21_strpbrk(const char *str1, const char *str2) {
+  int str1_len = s21_strlen(str1);
+  int str2_len = s21_strlen(str2);
+
+  for (int i = 0; i < str1_len; i++) {
+    for (int j = 0; j < str2_len; j++) {
+      if (str1[i] == str2[j]) {
+        return (char *)&str1[i];
+      }
+    }
+  }
+  return S21_NULL;
+}
+
+// Выполняет поиск последнего вхождения символа c (беззнаковый тип) в строке, на
+// которую указывает аргумент str.
+char *s21_strrchr(const char *str, int c) {
+  const char *p = str;
+  const char *last_occurrence = 0;
+  while (*p != '\0') {
+    if (*p == c) {
+      last_occurrence = p;
+    }
+    p++;
+  }
+  return (char *)last_occurrence;
+}
+
+// Находит первое вхождение всей строки needle (не включая завершающий нулевой
+// символ), которая появляется в строке haystack.
+char *s21_strstr(const char *haystack, const char *needle) {
+  int haystack_len = s21_strlen(haystack);
+  int needle_len = s21_strlen(needle);
+
+  for (int i = 0; i <= haystack_len - needle_len; i++) {
+    int j;
+    for (j = 0; j < needle_len; j++) {
+      if (haystack[i + j] != needle[j]) {
+        break;
+      }
+    }
+    if (j == needle_len) {
+      return (char *)&haystack[i];
+    }
+  }
+  return S21_NULL;
+}
+
+// Выполняет поиск во внутреннем массиве номера ошибки errnum
+// и возвращает указатель на строку с сообщением об ошибке
 
 #if defined(__APPLE__) || defined(__MACH__)
 #define S21_ERRLIST_SIZE 107
@@ -375,193 +548,37 @@ static const char *const s21_sys_errlist[S21_ERRLIST_SIZE] = {
 };
 #endif
 
-// res статический массив с размером BUFF_SIZE 512 байт
-
 char *s21_strerror(int errnum) {
   static char res[BUFF_SIZE] = {'\0'};
 
   if (errnum < 0 || errnum >= S21_ERRLIST_SIZE)
     sprintf(res, "Unknown error: %d", errnum);
   else
-    strcpy(res,
-           s21_sys_errlist[errnum]);  // strcpy надо поставить на нашу строку
+    strcpy(res, s21_sys_errlist[errnum]);
 
   return res;
 }
 
-void *s21_to_upper(const char *str) {
-  if (str == S21_NULL) {
-    return S21_NULL;
+// Разбивает строку str на ряд токенов, разделенных delim.
+char *s21_strtok(char *str, const char *delim) {
+  static char *last = S21_NULL;
+  char *tmp = S21_NULL;
+  int flag = 1;
+  if (str != S21_NULL)
+    last = str;
+  else {
+    if (last == S21_NULL) flag = 0;
+    str = last;
   }
-
-  int lenght = s21_strlen(str);
-
-  char *result = (char *)malloc(lenght + 1);
-  if (result == S21_NULL) {
-    return S21_NULL;
-  }
-
-  for (int i = 0; i < lenght; i++) {
-    if (str[i] >= 'a' && str[i] <= 'z') {
-      result[i] = str[i] - 'a' + 'A';
+  if (flag) {
+    char *end = s21_strpbrk(str, delim);
+    if (end != S21_NULL) {
+      *end = '\0';
+      last = end + 1;
     } else {
-      result[i] = str[i];
+      last = S21_NULL;
     }
+    tmp = str;
   }
-
-  result[lenght] = '\0';
-  return result;
-}
-
-void *s21_to_lower(const char *str) {
-  if (str == S21_NULL) {
-    return S21_NULL;
-  }
-
-  int lenght = s21_strlen(str);
-
-  char *result = (char *)malloc(lenght + 1);
-  if (result == S21_NULL) {
-    return S21_NULL;
-  }
-
-  for (int i = 0; i < lenght; i++) {
-    if (str[i] >= 'A' && str[i] <= 'Z') {
-      result[i] = str[i] - 'A' + 'a';
-    } else {
-      result[i] = str[i];
-    }
-  }
-
-  result[lenght] = '\0';
-  return result;
-}
-
-void *s21_insert(const char *src, const char *str, size_t start_index) {
-  if (src == S21_NULL || str == S21_NULL || start_index > s21_strlen(src)) {
-    return S21_NULL;
-  }
-
-  s21_size_t src_len = s21_strlen(src);
-  s21_size_t str_len = str_len = s21_strlen(str);
-  s21_size_t result_len = src_len + str_len;
-
-  char *result = (char *)malloc(result_len + 1);
-  if (result == S21_NULL) {
-    return S21_NULL;
-  }
-
-  s21_strncpy(result, src, start_index);
-  s21_strncpy(result + start_index, str, str_len);
-  strcpy(result + start_index + str_len, src + start_index);
-
-  return result;
-}
-
-void *s21_trim(const char *src, const char *trim_chars) {
-  if (src == S21_NULL || trim_chars == S21_NULL) {
-    return S21_NULL;
-  }
-
-  size_t src_len = strlen(src);
-  size_t start_index = 0;
-  size_t end_index = src_len - 1;
-
-  while (start_index < src_len &&
-         s21_strchr(trim_chars, src[start_index]) != S21_NULL) {
-    start_index++;
-  }
-
-  while (end_index > start_index &&
-         s21_strchr(trim_chars, src[end_index]) != S21_NULL) {
-    end_index--;
-  }
-
-  s21_size_t result_len =
-      (start_index <= end_index) ? (end_index - start_index + 1) : 0;
-
-  char *result = (char *)malloc(result_len + 1);
-  if (result == S21_NULL) {
-    return S21_NULL;  // Ошибка выделения памяти
-  }
-
-  s21_strncpy(result, src + start_index, result_len);
-  result[result_len] = '\0';
-
-  return result;
-}
-
-void *memchr(const void *str, int c, s21_size_t n) {
-  const unsigned char *p = str;
-  unsigned char pc = c;
-  for (s21_size_t i = 0; i < n; i++) {
-    if (p[i] == pc) {
-      return (void *)(p + i);
-    }
-  }
-  return NULL;
-}
-
-// Функции Люды
-
-char *s21_strchr(const char *str, int c) {
-  unsigned char *pstr = (unsigned char *)str;
-  int length = s21_strlen(str);
-  for (int i = 0; i <= length; i++) {
-    if (*pstr == (unsigned char)c) {
-      return (char *)pstr;
-    }
-    pstr++;
-  }
-  return S21_NULL;
-}
-
-// Находит первый символ в строке str1, который соответствует любому символу,
-// указанному в str2.
-char *s21_strpbrk(const char *str1, const char *str2) {
-  int str1_len = s21_strlen(str1);
-  int str2_len = s21_strlen(str2);
-
-  for (int i = 0; i < str1_len; i++) {
-    for (int j = 0; j < str2_len; j++) {
-      if (str1[i] == str2[j]) {
-        return (char *)&str1[i];
-      }
-    }
-  }
-  return S21_NULL;
-}
-
-// Выполняет поиск последнего вхождения символа c (беззнаковый тип) в строке, на
-// которую указывает аргумент str.
-char *s21_strrchr(const char *str, int c) {
-  const char *p = str;
-  const char *last_occurrence = 0;
-  while (*p != '\0') {
-    if (*p == c) {
-      last_occurrence = p;
-    }
-    p++;
-  }
-  return (char *)last_occurrence;
-}
-
-// Находит первое вхождение всей строки needle (не включая завершающий нулевой
-// символ), которая появляется в строке haystack.
-char *s21_strstr(const char *haystack, const char *needle) {
-  int haystack_len = s21_strlen(haystack);
-  int needle_len = s21_strlen(needle);
-
-  for (int i = 0; i <= haystack_len - needle_len; i++) {
-    int j;
-    for (j = 0; j < needle_len; j++) {
-      if (haystack[i + j] != needle[j]) {
-        break;
-      }
-    }
-    if (j == needle_len) {
-      return (char *)&haystack[i];
-    }
-  }
-  return S21_NULL;
+  return tmp;
 }
